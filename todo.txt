@@ -1,0 +1,13 @@
+
+To-Do: 
+	->Checksum matching in parseline function.
+	->More Error handling structure.
+	->Add verbose
+	->Revision Control
+	->Add functions to Read Memory, Lock bits, Signature reading implementation.
+	->Get rid of bcm2835 lib.
+	->Make Library.
+	->Auto-detect microcontroller controller.
+	->AVR and other 8-bit ISP compatible microcontroller support
+	->Make Parallel Programming interface.
+	->4-byte sending instead of one at a time.
