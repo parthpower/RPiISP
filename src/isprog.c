@@ -1,64 +1,9 @@
-/*
-	Programmer for InSystemProgramming (ISP) microcontrollers using Raspberry Pi.
-	
-	Author:			Parth Parikh
-	Email:			parthpower@gmail.com
-	Version:		0.0.3 (Alfa 3)
-	Description:	Simple ISP programmer using Raspberry Pi SPI. Currently supporting AT89S51-52
-	Reference:	AT89S51 Datasheet, BCM2835 Datasheet, and some SPI docs.	
-*/
-
-/*To-Do: 12/17/2014
-	->Checksum matching in parseline function.
-	->More Error handling structure.
-	->Add verbose
-	->Revision Control
-	->Add functions to Read Memory, Lock bits, Signature reading implementation.
-	->Get rid of bcm2835 lib.
-	->Make Library.
-	->Auto-detect microcontroller controller.
-	->AVR and other 8-bit ISP compatible microcontroller support
-	->Make Parallel Programming interface.
-	->4-byte sending instead of one at a time.
-*/
-
+//isprog.c
 #include <stdio.h>
 #include <math.h> 
 #include <string.h>
 #include "bcm2835.h"
-
-//Structure for soring the Intel Hex 
-typedef struct {
-	int addr;
-	unsigned char count;
-	unsigned char recordtype;
-	unsigned char data[255];
-	unsigned char checksum;
-}hexline;
-//Every function returns 0 on success and -1 on failure 
-
-unsigned int strtohex(char*);					 //Convert hex string to equivalent value , the string must end with NULL char, maximum 2-byte output as unsigned int
-int parseline(char*,hexline*); 					//Parse a record string of Intel Hex to the hexline structure
-int sendline(hexline*);								 //Send single record uses writeByte function 
-int writeByte(unsigned char,int); 				//Arguments: a byte to write (1-byte) unsigned char and address (2-byte) int to write on Flash.
-unsigned char sendByte(unsigned char); 	//Send a single byte and returns the value from MISO. This function is for future improvements.
-int initProg(); 											//Initialize the SPI, set the SCLK, SPI mode and send Program Enable signal, must call this before calling any of the function.
-int burnFile(FILE*) 									//Parse the Hexfile and do all the things needed to burn it
-
-int main(int argc,char* argv[])
-{
-	if(argc<2)
-	{
-		printf("Usage %s Hexfile",argv[0]);
-		return -1;
-	}
-	initProg();
-	chipErase();
-	FILE* hexfile = fopen(argv[1],"r");
-	if(burnFile(hexfile)!=0)
-		return -1;
-	return 0;
-}
+#include "isprog.h"
 
 unsigned int strtohex(char* in)
 {
@@ -77,10 +22,9 @@ unsigned int strtohex(char* in)
 	return out;
 }
 
-
 int parseline(char* line,hexline* out)
 {
-	unsigned char tmp[5];
+	char tmp[5];
 	unsigned char sum;
 	
 	int i;
@@ -189,7 +133,7 @@ int burnFile(FILE* hexfile)
 	{
 		praseline(linestr,&rec);	//Parse the line and send it to processor
 		sendline(&rec);
-		if(in->recordtype == 0x01) //If final line to write
+		if(rec.recordtype == 0x01) //If final line to write
 			break;
 	}
 	return 0;
