@@ -131,7 +131,7 @@ int burnFile(FILE* hexfile)
 
 	while(fscanf(hexfile,"%s",linestr)!=EOF)	//Get each line till EOF reached
 	{
-		praseline(linestr,&rec);	//Parse the line and send it to processor
+		parseline(linestr,&rec);	//Parse the line and send it to processor
 		sendline(&rec);
 		if(rec.recordtype == 0x01) //If final line to write
 			break;

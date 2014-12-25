@@ -17,7 +17,7 @@ $(BUILDDIR)/$(TARGET): $(OBJECTS)
 	$(CC)  $^ -o $@ $(LIBS)
 
 $(OBJECTS): $(BUILDDIR)/%.o : $(SOURCEDIR)/%.c
-	$(CC) $(CFLAGS) $< -o $@
+	$(CC) $(CFLAGS) -c $< -o $@
  
 clean:
 	-rm -f $(BINDIR)/*.o
