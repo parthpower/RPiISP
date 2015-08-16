@@ -3,7 +3,7 @@
 InSystemProgrammer (ISP) for Atmel microcontrollers through SPI on Raspberry Pi.
 --------------------------------------------
 
-INSATALL: </br>
+INSTALL: </br>
 ---------------
 Just write <i>./make</i> !!!
 
